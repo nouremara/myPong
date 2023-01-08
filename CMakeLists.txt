@@ -33,9 +33,9 @@ include_directories(
 	${SDL2_MIXER_INCLUDE_DIRS}
 )
 
-add_executable(pong ${SOURCES})
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(pong
+target_link_libraries(${CMAKE_PROJECT_NAME}
 	${SDL2_LIBRARIES}
 	${SDL2_TTF_LIBRARIES}
 	${SDL2_IMAGE_LIBRARIES}
