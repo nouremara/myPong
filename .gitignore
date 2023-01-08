@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+*.stash
+build/*
+
+# Except for the assets directory:
+!build/assets
+
+# Qt project related
+myPong.pro.user
+
+
