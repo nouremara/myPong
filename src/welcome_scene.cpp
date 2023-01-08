@@ -121,6 +121,11 @@ void WelcomeScene::onKeyUp(SDL_KeyboardEvent &event) {
     ++focusIndex;
     if (focusIndex > 5) {focusIndex = 0;}
     break;
+
+  case SDLK_F2:
+      // start the game directly
+      onButtonClickSelected(3);
+    break;
   }
 }
 

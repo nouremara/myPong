@@ -22,10 +22,13 @@ Game::Game()
 }
 
 Game::~Game() {
+  //SDL_StopTextInput();
+
   Mix_FreeChunk(wallHitSound);
   Mix_FreeChunk(paddleHitSound);
   TTF_CloseFont(mFont);
   SDL_DestroyWindow(mWindow);
+  
   Mix_Quit();
   TTF_Quit();
   SDL_Quit();
