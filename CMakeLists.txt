@@ -40,4 +40,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
 	${SDL2_TTF_LIBRARIES}
 	${SDL2_IMAGE_LIBRARIES}
 	${SDL2_MIXER_LIBRARIES}
+	sqlite3
+	pthread
 )

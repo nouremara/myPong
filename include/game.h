@@ -23,6 +23,7 @@
 
 #include "scene.h"
 #include "userinfo.h"
+#include "sqlitedatabase.h"
 
 #include <array>
 #include <string>
@@ -95,6 +96,7 @@ namespace myPong
     std::array<int, 2> mHalfResolution;
     std::array<int, 2> mPlayerScores;
 
+    SQLiteDatabase gameDB;
     UserInfo currentUser;
     std::string mTextInput;
   };

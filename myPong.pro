@@ -39,7 +39,7 @@ HEADERS += include/ball.h \
 
 
 #`sdl2-config --cflags --libs` -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf
-LIBS += -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf
+LIBS += -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lsqlite3 -lpthread
 
 
 INCLUDEPATH += /usr/include/SDL2

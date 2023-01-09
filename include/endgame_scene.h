@@ -23,7 +23,7 @@ namespace myPong
     void onUpdate() override;
     void onEnter() override;
     void onExit() override;
-    void onKeyDown(SDL_KeyboardEvent& event) override;
+    void onKeyDown(SDL_KeyboardEvent&) override;
     void onKeyUp(SDL_KeyboardEvent& event) override;
     void onTextInpt(std::string &text) override;
 

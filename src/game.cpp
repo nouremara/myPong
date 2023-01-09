@@ -14,21 +14,28 @@
 using namespace myPong;
 
 Game::Game()
-    : mWindow(nullptr), mRenderer(nullptr), mFont(nullptr),
-      wallHitSound(nullptr), paddleHitSound(nullptr), mResolution({800, 600}),
+    : mWindow(nullptr), 
+      mRenderer(nullptr), 
+      mFont(nullptr),
+      wallHitSound(nullptr), 
+      paddleHitSound(nullptr), 
+      mResolution({800, 600}),
       mHalfResolution({mResolution[0] / 2, mResolution[1] / 2}),
-      mPlayerScores({0, 0}), currentUser() {
+      mPlayerScores({0, 0}), 
+      gameDB("./assets/myPongDB.db3"), 
+      currentUser() 
+{
   // ...
 }
 
 Game::~Game() {
-  //SDL_StopTextInput();
+  // SDL_StopTextInput();
 
   Mix_FreeChunk(wallHitSound);
   Mix_FreeChunk(paddleHitSound);
   TTF_CloseFont(mFont);
   SDL_DestroyWindow(mWindow);
-  
+
   Mix_Quit();
   TTF_Quit();
   SDL_Quit();
@@ -113,10 +120,11 @@ void Game::start() {
         break;
 
       case SDL_KEYDOWN:
-       if (event.key.keysym.sym == SDLK_BACKSPACE && mTextInput.size()) {
+        if (event.key.keysym.sym == SDLK_BACKSPACE && mTextInput.size()) {
           mTextInput.pop_back();
         }
-        if ((event.key.keysym.sym == SDLK_DOWN) || (event.key.keysym.sym == SDLK_UP) ) {
+        if ((event.key.keysym.sym == SDLK_DOWN) ||
+            (event.key.keysym.sym == SDLK_UP)) {
           mTextInput.clear();
         }
         mScene->onKeyDown(event.key);

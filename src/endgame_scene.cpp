@@ -51,7 +51,6 @@ EndgameScene::~EndgameScene()
 
 void EndgameScene::onDraw(SDL_Renderer& renderer)
 {
-
  if (mBackgroundImage != nullptr) {
     // draw the background image
     SDL_RenderCopy(&renderer, mBackgroundImage, nullptr, nullptr);
@@ -104,7 +103,7 @@ void EndgameScene::onExit()
   // ...	
 }
 
-void EndgameScene::onKeyDown(SDL_KeyboardEvent& event)
+void EndgameScene::onKeyDown(SDL_KeyboardEvent& /*event*/)
 {
   // ...
 }
@@ -119,6 +118,6 @@ void EndgameScene::onKeyUp(SDL_KeyboardEvent& event)
   }
 }
 
-void EndgameScene::onTextInpt(std::string &text){
+void EndgameScene::onTextInpt(std::string &/*text*/){
   // ...
 }

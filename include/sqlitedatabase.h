@@ -143,10 +143,10 @@ public:
   }
 
   static int callback(
-      void *data,   	/* Data provided in the 4th argument of sqlite3_exec() */
-      int colCount, 	/* The number of columns in row */
+      void* /*data*/, 	/* Data provided in the 4th argument of sqlite3_exec() */
+      int /*colCount*/,	/* The number of columns in row */
       char **rowFields, /* An array of strings representing fields in the row */
-      char **azColName  /* An array of strings representing column names */
+      char **/*azColName*/  /* An array of strings representing column names */
   ) {
     users.push_back(UserInfo(atoi(rowFields[0]), rowFields[1], rowFields[2],
                              atoi(rowFields[3]), atoi(rowFields[4]),

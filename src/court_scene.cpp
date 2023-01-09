@@ -137,7 +137,7 @@ void CourtScene::onKeyUp(SDL_KeyboardEvent& event)
 }
 
 
-void CourtScene::onTextInpt(std::string &text){
+void CourtScene::onTextInpt(std::string &/*text*/){
   //...
 }
 
