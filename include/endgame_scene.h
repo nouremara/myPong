@@ -30,7 +30,8 @@ namespace myPong
 
   private:
     Game&         mGame;
-    SDL_Texture*  mTopicTexture;
+    SDL_Texture*  mBackgroundImage;
+    SDL_Texture*  mTitleTextTexture;
     SDL_Texture*  mEndgameTexture;
     SDL_Texture*  mWinnerTexture;
     SDL_Texture*  mEndResultTexture;

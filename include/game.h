@@ -38,7 +38,7 @@ namespace myPong
 {
   // the game will end when score corsses this limit.
   // and the winner is the one that scores 1 goal more than this number
-  const int MAX_GOALS_TO_WIN = 10;
+  const int MAX_GOALS_TO_WIN = 1;
 
   class Game
   {
