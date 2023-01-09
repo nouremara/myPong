@@ -101,7 +101,7 @@ void WelcomeScene::onExit() {
   // ...
 }
 
-void WelcomeScene::onKeyDown(SDL_KeyboardEvent &event) {
+void WelcomeScene::onKeyDown(SDL_KeyboardEvent &/*event*/) {
   // ...
 }
 
@@ -115,11 +115,15 @@ void WelcomeScene::onKeyUp(SDL_KeyboardEvent &event) {
   case SDLK_UP:
     --focusIndex;
     if (focusIndex < 0) {focusIndex = 5;}
+    //play hit wall sound
+    mGame.playSoundEffect(1);
     break;
 
   case SDLK_DOWN:
     ++focusIndex;
     if (focusIndex > 5) {focusIndex = 0;}
+    //play hit wall sound
+    mGame.playSoundEffect(1);
     break;
 
   case SDLK_F2:
