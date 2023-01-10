@@ -155,8 +155,16 @@ void WelcomeScene::onButtonClickSelected(int index) {
 }
 
 bool WelcomeScene::logIn() {
-  std::cout << "\nlogin function: " << mInputUserName <<"password: " << mInputPassword;
-  return false;
+  bool re = mGame.checkUser(mInputUserName, mInputPassword);
+  if(!re){
+    mGame.ShowSimpleDialogBox("Login Error", "Wrong username and/or password. Try again\n\nor click Start Game to play as Guest");
+    return re;
+  }
+  //std::cout << "\nlogin function: " << mInputUserName <<"  password: " << mInputPassword << "\n";
+
+  //login succeeded move to the court scene
+  onButtonClickSelected(3);  
+  return re;
 }
 
 void WelcomeScene::drawFocusBox(SDL_Renderer &renderer, int index) {

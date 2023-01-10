@@ -44,8 +44,8 @@ class SQLiteDatabase {
   int db_status;
   std::string sql;
 
-    // hold info for all users
-	static std::vector<UserInfo> users;
+  // hold info for all users
+  std::vector<UserInfo> users;
 
 public:
   /*=========================================================================*
@@ -119,43 +119,112 @@ public:
     }
   }
 
+  /**
+   * @brief get a status description of the database
+   *
+   * @return string with the status of the database and/or the last command
+   *  executed on it
+   */
   std::string get_db_status() { return db_status_message; }
 
-  void getUserData(const std::string desiredUserName = "",
-                   const std::string desiredUserPassword = "") {
+  /**
+   * @brief get user info with his logging credentials
+   *
+   * @param desiredUserName     username to check
+   * @param desiredUserPassword user password to check
+   * @return true if one (or more) user is found with the given credentials
+   */
+  bool checkUsers(const std::string desiredUserName = "",
+                 const std::string desiredUserPassword = "") {
     // delete all previous users inf
     users.clear();
 
-    /* Create SQL statement 
-	   e.g., SELECT * FROM USERS WHERE userName ='abc' AND password ='xyz'
-	*/
+    /* Create SQL statement
+      e.g., SELECT * FROM USERS WHERE userName ='abc' AND password ='xyz'
+    */
     if (desiredUserName.empty() && desiredUserPassword.empty()) {
       sql = "SELECT * FROM USERS;";
     } else if (desiredUserPassword.empty()) {
       sql = "SELECT * FROM USERS WHERE userName ='" + desiredUserName + "';";
     } else {
-      sql = "SELECT * FROM USERS WHERE userName ='" + desiredUserName + "' AND password ='" + desiredUserPassword + "';";
+      sql = "SELECT * FROM USERS WHERE userName ='" + desiredUserName +
+            "' AND password ='" + desiredUserPassword + "';";
     }
 
-    /* Execute SQL statement */
-    char *zErrMsg = 0;
-    db_status = sqlite3_exec(DB, sql.c_str(), callback, &users, &zErrMsg);
+    // Execute SQL statement
+    char *err = nullptr;
+    db_status = sqlite3_exec(
+      DB, sql.c_str(),
+      [](void *ctx,         /* Data provided in sqlite3_exec() 4th argument*/
+          int /*colCount*/, /* The number of columns in row */
+          char** rowFields, /* array of strings representing fields in row */
+          char** /*colNames*/ /* array of strings representing column names*/
+          ) -> int {
+        static_cast<std::vector<UserInfo> *>(ctx)->push_back(UserInfo(
+            atoi(rowFields[0]), rowFields[1], rowFields[2],
+            atoi(rowFields[3]), atoi(rowFields[4]), atoi(rowFields[5]),
+            atoi(rowFields[6]), atoi(rowFields[7]), atoi(rowFields[8])));
+        return 0;
+      },
+      &users, &err);
+
+    return !users.empty();
   }
 
-  static int callback(
-      void* /*data*/, 	/* Data provided in the 4th argument of sqlite3_exec() */
-      int /*colCount*/,	/* The number of columns in row */
-      char **rowFields, /* An array of strings representing fields in the row */
-      char **/*azColName*/  /* An array of strings representing column names */
-  ) {
-    users.push_back(UserInfo(atoi(rowFields[0]), rowFields[1], rowFields[2],
-                             atoi(rowFields[3]), atoi(rowFields[4]),
-                             atoi(rowFields[5]), atoi(rowFields[6]),
-                             atoi(rowFields[7]), atoi(rowFields[8])));
+  /**
+   * @brief get user info with his logging credentials
+   *
+   * @param desiredUserName     username to check
+   * @param desiredUserPassword user password to check
+   * @return true if one (or more) user is found with the given credentials
+   */
+  bool checkUser(const std::string desiredUserName,
+                 const std::string desiredUserPassword) {
+    // delete all previous users inf
+    users.clear();
 
-    return 0;
+    /* Create SQL statement
+      e.g., SELECT * FROM USERS WHERE userName ='abc' AND password ='xyz'
+    */
+   
+      sql = "SELECT * FROM USERS WHERE userName ='" + desiredUserName +
+            "' AND password ='" + desiredUserPassword + "';";
+    
+
+    // Execute SQL statement
+    char *err = nullptr;
+    db_status = sqlite3_exec(
+      DB, sql.c_str(),
+      [](void *ctx,         /* Data provided in sqlite3_exec() 4th argument*/
+          int /*colCount*/, /* The number of columns in row */
+          char** rowFields, /* array of strings representing fields in row */
+          char** /*colNames*/ /* array of strings representing column names*/
+          ) -> int {
+        static_cast<std::vector<UserInfo> *>(ctx)->push_back(UserInfo(
+            atoi(rowFields[0]), rowFields[1], rowFields[2],
+            atoi(rowFields[3]), atoi(rowFields[4]), atoi(rowFields[5]),
+            atoi(rowFields[6]), atoi(rowFields[7]), atoi(rowFields[8])));
+        return 0;
+      },
+      &users, &err);
+
+    return !users.empty();
   }
 
+bool getFirstUser(UserInfo& user){ 
+  if(users.empty()){
+    user=UserInfo(); //if no users return a default one. 
+    return false;
+  }
+  user=users[0]; //if one or more users return the first one.
+  return true;
+}
+
+  /**
+   * @brief insert a new user info to the database
+   *
+   * @param the new user info to be inserted
+   */
   void insertNewUser(std::string userName, std::string password, int score = 0,
                      int level = 0, int ballX = -1, int ballY = -1,
                      int leftPaddelY = -1, int rightPaddelY = -1) {

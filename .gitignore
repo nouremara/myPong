@@ -39,4 +39,9 @@ build/*
 # Qt project related
 myPong.pro.user
 
+# VS Code related
+.vscode/*
 
+
+myPong.pro.user
+myPong.pro.user

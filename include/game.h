@@ -69,11 +69,14 @@ namespace myPong
     */
     SDL_Texture* createImage(const char *fileName);
     void playSoundEffect(int soundClipIndex);
+    int ShowDialogBox(const std::string& title, const std::string& message);
+    int ShowSimpleDialogBox(const std::string &title, const std::string &message, const int &dialogType=1);
 
+    bool checkUser(const std::string desiredUserName = "", const std::string desiredUserPassword = "");
+    UserInfo& getCurrentUser(){return currentUser;}    
+    
 
     SDL_Renderer*  getRenderer(){return mRenderer;}
-    UserInfo&      getCurrentUser(){return currentUser;}    
-
 
     /* Get the resolution (in a 2d-array) of the game canvas. */
     const std::array<int, 2>& getResolution() const { return mResolution; }

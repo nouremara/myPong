@@ -14,18 +14,11 @@
 using namespace myPong;
 
 Game::Game()
-    : mWindow(nullptr), 
-      mRenderer(nullptr), 
-      mFont(nullptr),
-      wallHitSound(nullptr), 
-      paddleHitSound(nullptr), 
-      mResolution({800, 600}),
+    : mWindow(nullptr), mRenderer(nullptr), mFont(nullptr),
+      wallHitSound(nullptr), paddleHitSound(nullptr), mResolution({800, 600}),
       mHalfResolution({mResolution[0] / 2, mResolution[1] / 2}),
-      mPlayerScores({0, 0}), 
-      gameDB("./assets/myPongDB.db3"), 
-      currentUser() 
-{
-  // ...
+      mPlayerScores({0, 0}), gameDB("./assets/myPongDB.db3"){
+  currentUser= UserInfo();
 }
 
 Game::~Game() {
@@ -242,3 +235,49 @@ void Game::playSoundEffect(int soundClipIndex) {
     break;
   }
 }
+//----------------------------------------------------------------
+
+bool Game::checkUser(const std::string desiredUserName,
+                     const std::string desiredUserPassword) 
+{
+  bool isFound = gameDB.checkUser(desiredUserName, desiredUserPassword);
+  if (isFound) {gameDB.getFirstUser(currentUser); }
+  return isFound;
+}
+  //----------------------------------------------------------------
+
+  int Game::ShowDialogBox(const std::string &title,
+                          const std::string &message) {
+    int buttonid = -1;
+
+    const SDL_MessageBoxButtonData buttons[] = {
+        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
+        {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "No"},
+    };
+
+    const SDL_MessageBoxData messageboxdata = {
+        SDL_MESSAGEBOX_INFORMATION, /* .flags */
+        NULL,                       /* .window */
+        title.c_str(),              /* .title */
+        message.c_str(),            /* .message */
+        SDL_arraysize(buttons),     /* .numbuttons */
+        buttons,                    /* .buttons */
+        NULL                        /* .colorScheme */
+    };
+
+    int ret = SDL_ShowMessageBox(&messageboxdata, &buttonid);
+    if (!ret) {
+      return ret;
+    }
+    return buttonid;
+  }
+
+  int Game::ShowSimpleDialogBox(const std::string &title,
+                                const std::string &message,
+                                const int &dialogType) {
+    Uint32 flags[3] = {SDL_MESSAGEBOX_ERROR, SDL_MESSAGEBOX_WARNING,
+                       SDL_MESSAGEBOX_INFORMATION};
+
+    return SDL_ShowSimpleMessageBox(flags[dialogType], title.c_str(),
+                                    message.c_str(), mWindow);
+  }

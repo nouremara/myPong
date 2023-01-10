@@ -22,8 +22,8 @@ namespace myPong
     void setValue(int value) { mValue = value; }
   private:
     Game& mGame;
-    int mValue;
     SDL_Rect mRect;
+    int mValue;
   };
 }
 

@@ -10,8 +10,8 @@ const int Paddle::VELOCITY = 8;
 Paddle::Paddle(CourtScene &scene, int x, int y, int width, int height, bool isLeftPaddel)
     : mScene(scene),
       mRect({x, y, width, height}),
-      isLeft(isLeftPaddel),
-      mMovement(Movement::NONE)
+      mMovement(Movement::NONE),
+      isLeft(isLeftPaddel)
 {
   // calculate half width and height.
   auto halfWidth = (width / 2);
