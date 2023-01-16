@@ -1,29 +1,33 @@
 #include "welcome_scene.h"
 #include "court_scene.h"
+#include "register_scene.h"
 #include "game.h"
 
 #include <SDL.h>
 
 using namespace myPong;
 
-WelcomeScene::WelcomeScene(Game &game)
-    : mGame(game), mBackgroundImage(nullptr), mTopicTexture(nullptr),
-      mLeftPlayerInstructions(nullptr), mRightPlayerInstructions(nullptr),
-      mContinueInstructions(nullptr), focusIndex(0) {
+WelcomeScene::WelcomeScene(Game &game) :
+    mGame(game),
+    mBackgroundImage(nullptr),
+    mTopicTexture(nullptr),
+    mLeftPlayerInstructions(nullptr),
+    mRightPlayerInstructions(nullptr),
+    mContinueInstructions(nullptr),
+    focusIndex(0)
+{
   mBackgroundImage = mGame.createImage("./assets/intro.png");
 
   if (mBackgroundImage == nullptr) {
     mTopicTexture = mGame.createText("SDL2 PONG");
-    mLeftPlayerInstructions =
-        mGame.createText("Controls for the left player: W and S");
-    mRightPlayerInstructions = mGame.createText(
-        "Controls for the right player: UP-ARROW and DOWN-ARROW");
-    mContinueInstructions =
-        mGame.createText("Press [ENTER] to start the match");
+    mLeftPlayerInstructions = mGame.createText("Controls for the left player: W and S");
+    mRightPlayerInstructions = mGame.createText("Controls for the right player: UP-ARROW and DOWN-ARROW");
+    mContinueInstructions = mGame.createText("Press [ENTER] to start the match");
   }
 }
 
-WelcomeScene::~WelcomeScene() {
+WelcomeScene::~WelcomeScene()
+{
   if (mBackgroundImage != nullptr) {
     SDL_DestroyTexture(mBackgroundImage);
   } else {
@@ -34,7 +38,8 @@ WelcomeScene::~WelcomeScene() {
   }
 }
 
-void WelcomeScene::onDraw(SDL_Renderer &renderer) {
+void WelcomeScene::onDraw(SDL_Renderer &renderer)
+{
   if (mBackgroundImage != nullptr) {
     // draw the background image
     SDL_RenderCopy(&renderer, mBackgroundImage, nullptr, nullptr);
@@ -44,7 +49,7 @@ void WelcomeScene::onDraw(SDL_Renderer &renderer) {
 
     // render input text
     if (!mInputUserName.empty()) {
-      SDL_Rect rect{505, 44, 145, 30};
+      SDL_Rect rect{ 505, 44, 145, 30 };
       SDL_Texture *texture = mGame.createText(mInputUserName.c_str());
       SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
       SDL_RenderCopy(&renderer, texture, nullptr, &rect);
@@ -52,7 +57,7 @@ void WelcomeScene::onDraw(SDL_Renderer &renderer) {
 
     // render input text
     if (!mInputPassword.empty()) {
-      SDL_Rect rect{505, 84, 145, 30};
+      SDL_Rect rect{ 505, 84, 145, 30 };
       SDL_Texture *texture = mGame.createText(mInputPassword.c_str());
       SDL_QueryTexture(texture, NULL, NULL, &rect.w, &rect.h);
       SDL_RenderCopy(&renderer, texture, nullptr, &rect);
@@ -64,7 +69,7 @@ void WelcomeScene::onDraw(SDL_Renderer &renderer) {
   // else draw native blocks
 
   // draw the topic of the game.
-  SDL_Rect rect{0, 100, 0, 0};
+  SDL_Rect rect{ 0, 100, 0, 0 };
   SDL_QueryTexture(mTopicTexture, nullptr, nullptr, &rect.w, &rect.h);
   rect.x = (400 - (rect.w / 2));
   SDL_RenderCopy(&renderer, mTopicTexture, nullptr, &rect);
@@ -76,8 +81,7 @@ void WelcomeScene::onDraw(SDL_Renderer &renderer) {
   SDL_RenderCopy(&renderer, mLeftPlayerInstructions, nullptr, &rect);
 
   // draw the right player control instructions.
-  SDL_QueryTexture(mRightPlayerInstructions, nullptr, nullptr, &rect.w,
-                   &rect.h);
+  SDL_QueryTexture(mRightPlayerInstructions, nullptr, nullptr, &rect.w, &rect.h);
   rect.x = (400 - (rect.w / 2));
   rect.y = 250;
   SDL_RenderCopy(&renderer, mRightPlayerInstructions, nullptr, &rect);
@@ -89,89 +93,113 @@ void WelcomeScene::onDraw(SDL_Renderer &renderer) {
   SDL_RenderCopy(&renderer, mContinueInstructions, nullptr, &rect);
 }
 
-void WelcomeScene::onUpdate() {
+void WelcomeScene::onUpdate()
+{
   // ...
 }
 
-void WelcomeScene::onEnter() {
+void WelcomeScene::onEnter()
+{
   // ...
 }
 
-void WelcomeScene::onExit() {
+void WelcomeScene::onExit()
+{
   // ...
 }
 
-void WelcomeScene::onKeyDown(SDL_KeyboardEvent &/*event*/) {
+void WelcomeScene::onKeyDown(SDL_KeyboardEvent & /*event*/)
+{
   // ...
 }
 
-void WelcomeScene::onKeyUp(SDL_KeyboardEvent &event) {
+void WelcomeScene::onKeyUp(SDL_KeyboardEvent &event)
+{
   // move player into the court scene to start the match.
   switch (event.keysym.sym) {
-  case SDLK_RETURN:
-    onButtonClickSelected(focusIndex);
-    break;
+    case SDLK_RETURN: onButtonClickSelected(focusIndex); break;
 
-  case SDLK_UP:
-    --focusIndex;
-    if (focusIndex < 0) {focusIndex = 5;}
-    //play hit wall sound
-    mGame.playSoundEffect(1);
-    break;
+    case SDLK_UP:
+      --focusIndex;
+      if (focusIndex < 0) { focusIndex = 5; }
+      // play hit wall sound
+      mGame.playSoundEffect(1);
+      break;
 
-  case SDLK_DOWN:
-    ++focusIndex;
-    if (focusIndex > 5) {focusIndex = 0;}
-    //play hit wall sound
-    mGame.playSoundEffect(1);
-    break;
+    case SDLK_DOWN:
+      ++focusIndex;
+      if (focusIndex > 5) { focusIndex = 0; }
+      // play hit wall sound
+      mGame.playSoundEffect(1);
+      break;
 
-  case SDLK_F2:
+    case SDLK_F2:
       // start the game directly
       onButtonClickSelected(3);
-    break;
+      break;
   }
 }
 
-void WelcomeScene::onTextInpt(std::string &text) {
+void WelcomeScene::onTextInpt(std::string &text)
+{
   // std::cout << text;
-  if (focusIndex == 0) {
-    mInputUserName = text;
-  }
-  if (focusIndex == 1) {
-    mInputPassword = text;
+  if (focusIndex == 0) { mInputUserName = text; }
+  if (focusIndex == 1) { mInputPassword = text; }
+}
+
+
+void WelcomeScene::onMouseClick(int buttonID, int mouseX, int mouseY)
+{
+  if ( (mouseX>500) && (mouseX<645) && (mouseY>45) && (mouseY<275)){
+    focusIndex = mouseY/40 -1 ; // it is zero-indexed
+    /*
+    std::string mouseCoord = "Left button was pressed!\n button pressed:" + std::to_string(buttonID) + 
+                              "\n X: " + std::to_string(mouseX) + 
+                              " Y: " + std::to_string(mouseY) +
+                              " focusIndex: " + std::to_string(focusIndex);
+    mGame.ShowSimpleDialogBox("Mouse", mouseCoord.c_str());
+    */
+    onButtonClickSelected(focusIndex);
   }
 }
 
-void WelcomeScene::onButtonClickSelected(int index) {
+
+void WelcomeScene::onButtonClickSelected(int index)
+{
   switch (index) {
-  case 2:
-    logIn();
-    break;
-  case 3:
-    mGame.setScene(std::make_shared<CourtScene>(mGame));
-    break;
+    case 2: logIn(); break;
+    case 3: mGame.setScene(std::make_shared<CourtScene>(mGame)); break;
+    case 4: mGame.ShowSimpleDialogBox("myPong", "Settings will go here"); break;
+    case 5: mGame.ShowSimpleDialogBox("myPong", "Help will go here"); break;
+    case 10: mGame.setScene(std::make_shared<RegisterScene>(mGame)); break;
   }
 }
 
-bool WelcomeScene::logIn() {
+bool WelcomeScene::logIn()
+{
   bool re = mGame.checkUser(mInputUserName, mInputPassword);
-  if(!re){
-    mGame.ShowSimpleDialogBox("Login Error", "Wrong username and/or password. Try again\n\nor click Start Game to play as Guest");
+  //std::cout << "\nre: " << re << "\n";
+  if (re) { // login succeeded move to the court scene
+    onButtonClickSelected(3);
     return re;
   }
-  //std::cout << "\nlogin function: " << mInputUserName <<"  password: " << mInputPassword << "\n";
 
-  //login succeeded move to the court scene
-  onButtonClickSelected(3);  
+  // login failed. Show error and ask to register
+  int reply = mGame.ShowDialogBox("Login Error", "Wrong username and/or password.\nClick No to try again\n\n Register as a new user?");
+  if (reply == 1) { // login succeeded move to the court scene
+    onButtonClickSelected(10);
+    return reply;
+  }
+  
   return re;
 }
 
-void WelcomeScene::drawFocusBox(SDL_Renderer &renderer, int index) {
+void WelcomeScene::drawFocusBox(SDL_Renderer &renderer, int index)
+{
   // draw focus rect
   SDL_SetRenderDrawColor(&renderer, 0xff, 0, 0, 0xff);
 
-  SDL_Rect rect{500, (45 + index * 40), 145, 30};
+  SDL_Rect rect{ 500, (45 + index * 40), 145, 30 };
   SDL_RenderDrawRect(&renderer, &rect);
 
   // turn back the renderer draw color to white.

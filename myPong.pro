@@ -16,6 +16,7 @@ SOURCES += src/ball.cpp \
     src/goal.cpp \
     src/main.cpp \
     src/paddle.cpp \
+    src/register_scene.cpp \
     src/score_indicator.cpp \
     src/wall.cpp \
     src/welcome_scene.cpp
@@ -29,6 +30,7 @@ HEADERS += include/ball.h \
     include/game.h \
     include/goal.h \
     include/paddle.h \
+    include/register_scene.h \
     include/scene.h \
     include/score_indicator.h \
     include/sqlitedatabase.h \

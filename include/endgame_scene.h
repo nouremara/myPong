@@ -26,6 +26,7 @@ namespace myPong
     void onKeyDown(SDL_KeyboardEvent&) override;
     void onKeyUp(SDL_KeyboardEvent& event) override;
     void onTextInpt(std::string &text) override;
+    void onMouseClick(int buttonID, int mouseX, int mouseY) override;
 
 
   private:

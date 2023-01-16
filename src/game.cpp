@@ -13,17 +13,24 @@
 
 using namespace myPong;
 
-Game::Game()
-    : mWindow(nullptr), mRenderer(nullptr), mFont(nullptr),
-      wallHitSound(nullptr), paddleHitSound(nullptr), mResolution({800, 600}),
-      mHalfResolution({mResolution[0] / 2, mResolution[1] / 2}),
-      mPlayerScores({0, 0}), gameDB("./assets/myPongDB.db3"){
-  currentUser= UserInfo();
+Game::Game() :
+    mWindow(nullptr),
+    mRenderer(nullptr),
+    mFont(nullptr),
+    wallHitSound(nullptr),
+    paddleHitSound(nullptr),
+    mResolution({ 800, 600 }),
+    mHalfResolution({ mResolution[0] / 2, mResolution[1] / 2 }),
+    mPlayerScores({ 0, 0 }),
+    gameDB("./assets/myPongDB.db3")
+{
+  currentUser = UserInfo();
 }
 
-Game::~Game() {
+Game::~Game()
+{
   // SDL_StopTextInput();
-
+  
   Mix_FreeChunk(wallHitSound);
   Mix_FreeChunk(paddleHitSound);
   TTF_CloseFont(mFont);
@@ -34,7 +41,8 @@ Game::~Game() {
   SDL_Quit();
 }
 
-void Game::start() {
+void Game::start()
+{
   // initialize the SDL2 framework along with systems.
   if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
     std::cerr << "Unable to initialize SDL: " << SDL_GetError() << std::endl;
@@ -48,59 +56,52 @@ void Game::start() {
   }
 
   // try to create a new window for the application.
-  mWindow = SDL_CreateWindow("myPong - Nour Emara", SDL_WINDOWPOS_CENTERED,
-                             SDL_WINDOWPOS_CENTERED, mResolution[0],
-                             mResolution[1], SDL_WINDOW_SHOWN);
+  mWindow = SDL_CreateWindow("myPong - Nour Emara", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, mResolution[0], mResolution[1], SDL_WINDOW_SHOWN);
   if (mWindow == nullptr) {
     std::cerr << "Unable to create SDL window: " << SDL_GetError() << std::endl;
     return;
   }
 
   // try to create a new renderer for the application window.
-  mRenderer = SDL_CreateRenderer(
-      mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (mRenderer == nullptr) {
-    std::cerr << "Unable to create SDL renderer: " << SDL_GetError()
-              << std::endl;
+    std::cerr << "Unable to create SDL renderer: " << SDL_GetError() << std::endl;
     return;
   }
 
   // initialize the font we want to use within our application.
   mFont = TTF_OpenFont("./assets/AntonioBold.ttf", 20);
-  if (mFont == nullptr) {
-    std::cerr << "Unable to load a font for the application: " << TTF_GetError()
-              << std::endl;
-  }
+  if (mFont == nullptr) { 
+    std::cerr << "Unable to load a font for the application: " << TTF_GetError() << std::endl;
+   }
 
   // Initialize sound effects
   // Mix_OpenAudio (frequency, format, channels, chunksize)
   Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
   wallHitSound = Mix_LoadWAV("./assets/WallHit.wav");
-  if (wallHitSound == nullptr) {
-    std::cerr << "Unable to load sound effects for the application: "
-              << Mix_GetError() << std::endl;
+  if (wallHitSound == nullptr) { 
+    std::cerr << "Unable to load sound effects for the application: " << Mix_GetError() << std::endl; 
   }
 
   paddleHitSound = Mix_LoadWAV("./assets/PaddleHit.wav");
-  if (paddleHitSound == nullptr) {
-    std::cerr << "Unable to load sound effects for the application: "
-              << Mix_GetError() << std::endl;
+  if (paddleHitSound == nullptr) { 
+    std::cerr << "Unable to load sound effects for the application: " << Mix_GetError() << std::endl; 
   }
 
   errorSound = Mix_LoadWAV("./assets/error.wav");
   if (errorSound == nullptr) {
-    std::cerr << "Unable to load sound effects for the application: "
-              << Mix_GetError() << std::endl;
+     std::cerr << "Unable to load sound effects for the application: " << Mix_GetError() << std::endl; 
   }
 
   goalSound = Mix_LoadWAV("./assets/goal.wav");
-  if (goalSound == nullptr) {
-    std::cerr << "Unable to load sound effects for the application: "
-              << Mix_GetError() << std::endl;
+  if (goalSound == nullptr) { 
+    std::cerr << "Unable to load sound effects for the application: " << Mix_GetError() << std::endl; 
   }
 
   // set the initial scene for the game.
   setScene(std::make_shared<WelcomeScene>(*this));
+
+  // std::string mouseCoord;
 
   auto isRunning = true;
   SDL_Event event;
@@ -108,29 +109,29 @@ void Game::start() {
     // poll and handle events from the SDL framework.
     while (SDL_PollEvent(&event) != 0) {
       switch (event.type) {
-      case SDL_QUIT:
-        isRunning = false;
-        break;
+        case SDL_QUIT: isRunning = false; break;
 
-      case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_BACKSPACE && mTextInput.size()) {
-          mTextInput.pop_back();
-        }
-        if ((event.key.keysym.sym == SDLK_DOWN) ||
-            (event.key.keysym.sym == SDLK_UP)) {
-          mTextInput.clear();
-        }
-        mScene->onKeyDown(event.key);
-        break;
+        case SDL_KEYDOWN:
+          if (event.key.keysym.sym == SDLK_BACKSPACE && mTextInput.size()) { mTextInput.pop_back(); }
+          if ((event.key.keysym.sym == SDLK_DOWN) || (event.key.keysym.sym == SDLK_UP)) { mTextInput.clear(); }
+          mScene->onKeyDown(event.key);
+          break;
 
-      case SDL_KEYUP:
-        mScene->onKeyUp(event.key);
-        break;
+        case SDL_KEYUP: mScene->onKeyUp(event.key); break;
 
-      case SDL_TEXTINPUT:
-        mTextInput += event.text.text;
-        mScene->onTextInpt(mTextInput);
-        break;
+        case SDL_MOUSEBUTTONDOWN: mScene->onMouseClick(event.button.button, event.motion.x, event.motion.y); break;
+        /*
+        case SDL_MOUSEMOTION:
+          //int mouseX = event.motion.x;
+          //int mouseY = event.motion.y;
+          mouseCoord = "X: " + std::to_string(event.motion.x) + " Y: " + std::to_string(event.motion.y);
+          SDL_SetWindowTitle(mWindow, mouseCoord.c_str());
+          break;
+        */
+        case SDL_TEXTINPUT:
+          mTextInput += event.text.text;
+          mScene->onTextInpt(mTextInput);
+          break;
       }
     }
 
@@ -152,7 +153,8 @@ void Game::start() {
   }
 }
 
-void Game::setScene(ScenePtr scene) {
+void Game::setScene(ScenePtr scene)
+{
   // skip the null scene assignment.
   if (scene == nullptr) {
     std::cerr << "Unable to set null as the active scene!" << std::endl;
@@ -160,22 +162,20 @@ void Game::setScene(ScenePtr scene) {
   }
 
   // tell old scene (if any) that we are going to exit from it.
-  if (mScene) {
-    mScene->onExit();
-  }
+  if (mScene) { mScene->onExit(); }
 
   // assign and enter the new scene.
   mScene = scene;
   mScene->onEnter();
 }
 
-SDL_Texture *Game::createText(const std::string &text) {
+SDL_Texture *Game::createText(const std::string &text)
+{
   // create a surface which contains the desired text.
-  SDL_Color color{0xff, 0xff, 0xff, 0xff};
+  SDL_Color color{ 0xff, 0xff, 0xff, 0xff };
   auto surface = TTF_RenderText_Blended(mFont, text.c_str(), color);
   if (surface == nullptr) {
-    std::cerr << "Unable to create a surface with a text: " << TTF_GetError()
-              << std::endl;
+    std::cerr << "Unable to create a surface with a text: " << TTF_GetError() << std::endl;
     return nullptr;
   }
 
@@ -183,15 +183,15 @@ SDL_Texture *Game::createText(const std::string &text) {
   auto texture = SDL_CreateTextureFromSurface(mRenderer, surface);
   SDL_FreeSurface(surface);
   if (texture == nullptr) {
-    std::cerr << "Unable to create texture from a text surface: "
-              << SDL_GetError() << std::endl;
+    std::cerr << "Unable to create texture from a text surface: " << SDL_GetError() << std::endl;
     return nullptr;
   }
 
   return texture;
 }
 
-SDL_Texture *Game::createImage(const char *fileName) {
+SDL_Texture *Game::createImage(const char *fileName)
+{
   /*
   //SDL_Surface* image = SDL_LoadBMP("./assets/checkerboard.png");
   SDL_Surface* img = SDL_LoadBMP(fileName);
@@ -207,8 +207,7 @@ SDL_Texture *Game::createImage(const char *fileName) {
 
   SDL_Texture *texture = IMG_LoadTexture(mRenderer, fileName);
   if (texture == nullptr) {
-    std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError()
-              << std::endl;
+    std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << std::endl;
     return nullptr;
   }
 
@@ -218,66 +217,52 @@ SDL_Texture *Game::createImage(const char *fileName) {
   return texture;
 }
 
-void Game::playSoundEffect(int soundClipIndex) {
+void Game::playSoundEffect(int soundClipIndex)
+{
   switch (soundClipIndex) {
-  case 1:
-    Mix_PlayChannel(-1, paddleHitSound, 0);
-    break;
-  case 2:
-    Mix_PlayChannel(-1, wallHitSound, 0);
-    break;
-  case 3:
-    Mix_PlayChannel(-1, goalSound, 0);
-    break;
+    case 1: Mix_PlayChannel(-1, paddleHitSound, 0); break;
+    case 2: Mix_PlayChannel(-1, wallHitSound, 0); break;
+    case 3: Mix_PlayChannel(-1, goalSound, 0); break;
 
-  default:
-    Mix_PlayChannel(-1, errorSound, 0);
-    break;
+    default: Mix_PlayChannel(-1, errorSound, 0); break;
   }
 }
 //----------------------------------------------------------------
 
-bool Game::checkUser(const std::string desiredUserName,
-                     const std::string desiredUserPassword) 
+bool Game::checkUser(const std::string desiredUserName, const std::string desiredUserPassword)
 {
   bool isFound = gameDB.checkUser(desiredUserName, desiredUserPassword);
-  if (isFound) {gameDB.getFirstUser(currentUser); }
+  if (isFound) { gameDB.getFirstUser(currentUser); }
   return isFound;
 }
-  //----------------------------------------------------------------
+//----------------------------------------------------------------
 
-  int Game::ShowDialogBox(const std::string &title,
-                          const std::string &message) {
-    int buttonid = -1;
+int Game::ShowDialogBox(const std::string &title, const std::string &message)
+{
+  int buttonid = -1;
 
-    const SDL_MessageBoxButtonData buttons[] = {
-        {SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes"},
-        {SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "No"},
-    };
+  const SDL_MessageBoxButtonData buttons[] = {
+    { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "Yes" },
+    { SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "No" },
+  };
 
-    const SDL_MessageBoxData messageboxdata = {
-        SDL_MESSAGEBOX_INFORMATION, /* .flags */
-        NULL,                       /* .window */
-        title.c_str(),              /* .title */
-        message.c_str(),            /* .message */
-        SDL_arraysize(buttons),     /* .numbuttons */
-        buttons,                    /* .buttons */
-        NULL                        /* .colorScheme */
-    };
+  const SDL_MessageBoxData messageboxdata = {
+    SDL_MESSAGEBOX_INFORMATION, /* .flags */
+    NULL,                       /* .window */
+    title.c_str(),              /* .title */
+    message.c_str(),            /* .message */
+    SDL_arraysize(buttons),     /* .numbuttons */
+    buttons,                    /* .buttons */
+    NULL                        /* .colorScheme */
+  };
 
-    int ret = SDL_ShowMessageBox(&messageboxdata, &buttonid);
-    if (!ret) {
-      return ret;
-    }
-    return buttonid;
-  }
+  int ret = SDL_ShowMessageBox(&messageboxdata, &buttonid);
+  //if (!ret) { return ret; }
+  return buttonid;
+}
 
-  int Game::ShowSimpleDialogBox(const std::string &title,
-                                const std::string &message,
-                                const int &dialogType) {
-    Uint32 flags[3] = {SDL_MESSAGEBOX_ERROR, SDL_MESSAGEBOX_WARNING,
-                       SDL_MESSAGEBOX_INFORMATION};
-
-    return SDL_ShowSimpleMessageBox(flags[dialogType], title.c_str(),
-                                    message.c_str(), mWindow);
-  }
+int Game::ShowSimpleDialogBox(const std::string &title, const std::string &message, const int &dialogType)
+{
+  Uint32 flags[3] = { SDL_MESSAGEBOX_ERROR, SDL_MESSAGEBOX_WARNING, SDL_MESSAGEBOX_INFORMATION };
+  return SDL_ShowSimpleMessageBox(flags[dialogType], title.c_str(), message.c_str(), mWindow);
+}

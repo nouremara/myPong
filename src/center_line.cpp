@@ -14,10 +14,10 @@ void CenterLine::onDraw(SDL_Renderer& renderer)
     SDL_Rect rect{ mRect.x, static_cast<int>(y), mRect.w, mRect.w };
 
     // change the renderer draw color to white.
-    //SDL_SetRenderDrawColor(&renderer, 0xcc, 0xff, 0x33, 0x50);
+    // SDL_SetRenderDrawColor(&renderer, 0xcc, 0xff, 0x33, 0x50);
     SDL_RenderFillRect(&renderer, &rect);
 
     // turn back the renderer draw color to white.
-    //SDL_SetRenderDrawColor(&renderer, 0xff, 0xff, 0xff, 0xff);
+    // SDL_SetRenderDrawColor(&renderer, 0xff, 0xff, 0xff, 0xff);
   }
 }

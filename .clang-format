@@ -1,0 +1,20 @@
+# Format Style Options - Created with Clang Power Tools
+---
+BasedOnStyle: LLVM
+AlignAfterOpenBracket: DontAlign
+AllowAllArgumentsOnNextLine: false
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+BreakBeforeBraces: Linux
+BreakConstructorInitializers: AfterColon
+ColumnLimit: 160
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+Cpp11BracedListStyle: false
+DerivePointerAlignment: true
+IndentCaseLabels: true
+MaxEmptyLinesToKeep: 2
+SortIncludes: false
+...

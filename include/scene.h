@@ -24,6 +24,15 @@ namespace myPong
 		virtual void onKeyDown(SDL_KeyboardEvent& event) = 0;
 		virtual void onKeyUp(SDL_KeyboardEvent& event) = 0;
 		virtual void onTextInpt(std::string &text) = 0;
+
+		/**
+		 * @brief handle mouse click events
+		 * 
+		 * @param buttonID which button is clicked (left, right, ...)
+		 * @param mouseX   x-coordinate of the mouse when clicked
+		 * @param mouseY   y-coordinate of the mouse when clicked
+		 */
+		virtual void onMouseClick(int buttonID, int mouseX, int mouseY) = 0;
 	};
 	typedef std::shared_ptr<Scene> ScenePtr;
 }

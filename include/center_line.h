@@ -14,7 +14,7 @@ namespace myPong
   class CenterLine
   {
   public:
-    CenterLine(int x, int y, int height, int widt);
+    CenterLine(int x, int y, int width, int height);
 
     void onDraw(SDL_Renderer& renderer);
   private:

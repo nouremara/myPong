@@ -75,13 +75,12 @@ public:
    *
    * @throw SQLite::Exception in case of error
    */
-  SQLiteDatabase(const std::string fileName) : dbFileName(fileName) {
+  explicit SQLiteDatabase(const std::string& fileName) : dbFileName(fileName) {
     /*
      * Open the database for read and write.
      * The database file must pre-exist or an error will be given.
      */
-    int db_status =
-        sqlite3_open_v2(dbFileName.c_str(), &DB, SQLITE_OPEN_READWRITE, NULL);
+    db_status = sqlite3_open_v2(dbFileName.c_str(), &DB, SQLITE_OPEN_READWRITE, NULL);
 
     if (db_status != SQLITE_OK) {
       // db_status_message = "Error open DB [" + std::to_string(db_status) + "]
@@ -134,8 +133,8 @@ public:
    * @param desiredUserPassword user password to check
    * @return true if one (or more) user is found with the given credentials
    */
-  bool checkUsers(const std::string desiredUserName = "",
-                 const std::string desiredUserPassword = "") {
+  bool checkUsers(const std::string& desiredUserName = "",
+                 const std::string& desiredUserPassword = "") {
     // delete all previous users inf
     users.clear();
 
@@ -178,8 +177,8 @@ public:
    * @param desiredUserPassword user password to check
    * @return true if one (or more) user is found with the given credentials
    */
-  bool checkUser(const std::string desiredUserName,
-                 const std::string desiredUserPassword) {
+  bool checkUser(const std::string& desiredUserName,
+                 const std::string& desiredUserPassword) {
     // delete all previous users inf
     users.clear();
 
@@ -225,9 +224,15 @@ bool getFirstUser(UserInfo& user){
    *
    * @param the new user info to be inserted
    */
-  void insertNewUser(std::string userName, std::string password, int score = 0,
-                     int level = 0, int ballX = -1, int ballY = -1,
-                     int leftPaddelY = -1, int rightPaddelY = -1) {
+  void insertNewUser(const std::string& userName,
+                     const std::string& password,
+                     const int score = 0,
+                     const int level = 0,
+                     const int ballX = -1,
+                     const int ballY = -1,
+                     const int leftPaddelY = -1,
+                     const int rightPaddelY = -1) 
+  {
     char *zErrMsg = 0;
 
     /* Create SQL statement */
@@ -251,7 +256,7 @@ bool getFirstUser(UserInfo& user){
     }
   }
 
-  void throwException(int valueToCheck, char *errMsg, std::string op) {
+  void throwException(int valueToCheck, char *errMsg, const std::string &op) {
     if (valueToCheck != SQLITE_OK) {
       db_status_message = "in\n" + std::string(__FILE__) + "\n" + __func__ +
                           " : " + std::to_string(__LINE__) + " for " + op +

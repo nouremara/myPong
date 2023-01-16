@@ -74,8 +74,8 @@ namespace myPong
 
     bool checkUser(const std::string desiredUserName = "", const std::string desiredUserPassword = "");
     UserInfo& getCurrentUser(){return currentUser;}    
+    void addNewUser (const std::string& userName, const std::string& password){gameDB.insertNewUser(userName,password);}
     
-
     SDL_Renderer*  getRenderer(){return mRenderer;}
 
     /* Get the resolution (in a 2d-array) of the game canvas. */
