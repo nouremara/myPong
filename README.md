@@ -3,11 +3,24 @@ myPong: my implementation of the classic Pong game in C++ and SDL2.
 
 Contains a single mode where two human players can play against each other.
 
-## Scenes
+## Game State Diagram
+The game states and the transition between them is shown in the following diagram.
+![alt text](./doc/state_diagram.png "State Diagram")
+
+### Scenes
 Game is split into following scenes:
-1. A welcome scene, which contains the main menu.
-2. A court scene, which contains the actual gameplay.
-3. An end game scene, which contains the results from the court scene.
+1. Welcome scene: which contains the main menu.
+2. Register scene: to sign in a new user of the game.
+3. Board scene: contains the actual gameplay.
+4. Final scene: contains the results of the gameplay.
+
+
+## Screenshots
+![alt text](./doc/Screenshot1.png "WelcomeScene")
+![alt text](./doc/Screenshot2.png "CourtScene")
+![alt text](./doc/Screenshot3.png "EndGameScene")
+
+
 
 # Third-Party Dependencies
 This implementation has external dependencies on the following libraries:
@@ -17,6 +30,14 @@ This implementation has external dependencies on the following libraries:
 * * [SDL2_image](https://www.libsdl.org/projects/SDL_ttf/) (ver. >=2.0.14)
 * [CMake](https://cmake.org/) (ver. >=3.7.2) (*optional*)
 * A compilation toolkit supported by the CMake utility (e.g. gcc).
+
+
+## Assets
+Some of the game assets (font, sound clips, ...) are obtained from online free web sites. The specific resources are:
+* Font from https://www.fontsquirrel.com/fonts/list/popular
+* Sound clips from https://mixkit.co/free-sound-effects/win/
+* SDL2 libs from https://github.com/libsdl-org/SDL/releases/tag/release-2.26.1
+
 
 
 ## Intalling Needed Tools and Dependencies on Ubuntu
@@ -54,20 +75,16 @@ For standard installation SDL2 and its libs are intalled to the following pathes
 
 
 ## Compilation
+There are two different methods to compile the code:
+* Using the .pro project file for Qt and building in Qt Creator.
+* Using CMake build tool with the prepared CMakeLists file.
+
+
 Easiest way to compile the code is to use the [CMake](https://cmake.org/) utility.
 
-
-
-CMake compilation uses Find*-modules from the /cmake folder which specify where CMake looks for the required libraries.
-
-Without any modifications, CMake will make use the following environment variable paths.
-* SDL2DIR, which should point to the root directory of the SDL2 library.
-* SDL2TTFDIR, which should point to the root directory of the SDL2_ttf library.
-
-## Screenshots
-![alt text](./doc/Screenshot1.png "WelcomeScene")
-![alt text](./doc/Screenshot2.png "CourtScene")
-![alt text](./doc/Screenshot3.png "EndGameScene")
+CMake compilation uses Find*-modules from the /cmake folder which specify where CMake looks for the required libraries. Without any modifications, CMake will make use of the following environment variable paths:
+* `SDL2_INCLUDE_DIRS`, `SDL2_TTF_INCLUDE_DIRS`, `SDL2_IMAGE_INCLUDE_DIRS`, and `SDL2_MIXER_INCLUDE_DIRS` which should point to the root directory of the `SDL2`, `SDL2_ttf`, `SDL2_image`, and `SDL2_mixer` libraries, respectively.
++ `SDL2_LIBRARIES`, `SDL2_TTF_LIBRARIES`, `SDL2_IMAGE_LIBRARIES`, and `SDL2_MIXER_LIBRARIES`  which should point to the library files of the `SDL2`, `SDL2_ttf`, `SDL2_image`, and `SDL2_mixer` libraries, respectively.
 
 
 
@@ -86,3 +103,10 @@ CREATE TABLE users (
 	rightPaddelY INTEGER DEFAULT -1 NOT NULL
 );
 ```
+
+
+# References
+* [How To Install SDL On Ubuntu](https://gist.github.com/aaangeletakis/3187339a99f7786c25075d4d9c80fad5#file-how-to-install-sdl-on-ubuntu-md)
+* [An Introduction To The SQLite C/C++ Interface](https://www.sqlite.org/cintro.html)
+* [How To Install and Use SQLite on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-sqlite-on-ubuntu-20-04)
+* [SDL2 Programming Tutorials](https://lazyfoo.net/tutorials/SDL/27_collision_detection/index.php)
