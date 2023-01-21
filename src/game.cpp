@@ -103,15 +103,17 @@ void Game::start()
 
   // std::string mouseCoord;
 
-  auto isRunning = true;
+  isRunning = true;
   SDL_Event event;
   while (isRunning) {
     // poll and handle events from the SDL framework.
     while (SDL_PollEvent(&event) != 0) {
       switch (event.type) {
-        case SDL_QUIT: isRunning = false; break;
+        //case SDL_QUIT: isRunning = false; break;
+        case SDL_QUIT: endGame(); break;
 
         case SDL_KEYDOWN:
+          if (event.key.keysym.sym == SDLK_ESCAPE) { endGame(); }
           if (event.key.keysym.sym == SDLK_BACKSPACE && mTextInput.size()) { mTextInput.pop_back(); }
           if ((event.key.keysym.sym == SDLK_DOWN) || (event.key.keysym.sym == SDLK_UP)) { mTextInput.clear(); }
           mScene->onKeyDown(event.key);
@@ -168,6 +170,19 @@ void Game::setScene(ScenePtr scene)
   mScene = scene;
   mScene->onEnter();
 }
+
+
+void Game::endGame()
+{
+// login failed. Show error and ask to register
+  int reply = ShowDialogBox("Exit!", "Are you sure you want to exit the game?");
+  if (reply == 1) { // Yes clicked, end the game
+    SDL_Quit();
+    isRunning = false;
+    //exit(0);  //better to end through game to make sure a clean exit.
+  }
+}
+
 
 SDL_Texture *Game::createText(const std::string &text)
 {

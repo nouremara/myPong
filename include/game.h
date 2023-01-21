@@ -56,6 +56,8 @@ namespace myPong
     void start();
 
     void setScene(ScenePtr scene);
+    void endGame();
+
 
     /*
     * Create SDL_Texture with a given text.
@@ -102,6 +104,8 @@ namespace myPong
     SQLiteDatabase gameDB;
     UserInfo currentUser;
     std::string mTextInput;
+
+    bool isRunning;
   };
 }
 

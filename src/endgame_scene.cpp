@@ -1,5 +1,6 @@
 #include "endgame_scene.h"
 #include "welcome_scene.h"
+#include "court_scene.h"
 
 #include <SDL.h>
 #include <memory>
@@ -35,7 +36,7 @@ EndgameScene::EndgameScene(Game &game)
     mWinnerTexture = mGame.createText(rightWinnerName.c_str());
   }
 
-  mInstructionsTexture = mGame.createText("Press [ENTER] to proceed");
+  mInstructionsTexture = mGame.createText("ENTER: play again, F2: restart the game");
 }
 
 EndgameScene::~EndgameScene() {
@@ -108,8 +109,12 @@ void EndgameScene::onKeyDown(SDL_KeyboardEvent & /*event*/) {
 void EndgameScene::onKeyUp(SDL_KeyboardEvent &event) {
   // move player back to the welcome scene.
   switch (event.keysym.sym) {
-  case SDLK_RETURN:
+  case SDLK_F2:
     mGame.setScene(std::make_shared<WelcomeScene>(mGame));
+    break;
+
+  case SDLK_RETURN:
+    mGame.setScene(std::make_shared<CourtScene>(mGame));
     break;
   }
 }
@@ -119,9 +124,11 @@ void EndgameScene::onTextInpt(std::string & /*text*/) {
 }
 
 void EndgameScene::onMouseClick(int buttonID, int mouseX, int mouseY){
-    std::string mouseCoord = "Left button was pressed!\n button pressed:"+
-    std::to_string(buttonID) + 
-    "\n X: " + std::to_string(mouseX) + 
-    " Y: " + std::to_string(mouseY);
-  mGame.ShowSimpleDialogBox("Mouse", mouseCoord.c_str());
+  //   std::string mouseCoord = "Left button was pressed!\n button pressed:"+
+  //   std::to_string(buttonID) + 
+  //   "\n X: " + std::to_string(mouseX) + 
+  //   " Y: " + std::to_string(mouseY);
+  // mGame.ShowSimpleDialogBox("Mouse", mouseCoord.c_str());
+  
+  // ...
 }

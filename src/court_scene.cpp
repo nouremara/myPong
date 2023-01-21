@@ -133,10 +133,7 @@ void CourtScene::onTextInpt(std::string& /*text*/)
 
 void CourtScene::onMouseClick(int buttonID, int mouseX, int mouseY)
 {
-  std::string mouseCoord = "Left button was pressed!\n button pressed:" + std::to_string(buttonID) + 
-                            "\n X: " + std::to_string(mouseX) + 
-                            " Y: " + std::to_string(mouseY);
-  mGame.ShowSimpleDialogBox("Mouse", mouseCoord.c_str());
+  //...
 }
 
 
